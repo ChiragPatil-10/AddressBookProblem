@@ -2,6 +2,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import  java.util.*;
+import java.io.InputStreamReader;
+import java.sql.SQLOutput;
+import java.util.*;
+
 
 class Contact {
     private String first_name;
@@ -71,7 +75,32 @@ public class AddressBook {
     public static void main(String[] args) throws IOException {
         System.out.println("Welcome to Address Book Program");
         AddressBook1 ab = new AddressBook1();
-        ab.addContact();
-        ab.displayContact();
+        Scanner sc = new Scanner(System.in);
+
+        while (true) {
+            System.out.println("\n   Menu");
+            System.out.println("1. Add Contact");
+            System.out.println("2. Display Contact");
+            System.out.println("3. Exit");
+            System.out.print("Choose an option: ");
+            int choice = sc.nextInt();
+            switch (choice) {
+                case 1:
+                    ab.addContact();
+                    break;
+
+                case 2:
+                    ab.displayContact();
+                    break;
+
+                case 3:
+                    System.out.println("Exiting...");
+                    sc.close();
+                    return;
+                default:
+                    System.out.println("invalid Input");
+            }
+        }
+
     }
 }
