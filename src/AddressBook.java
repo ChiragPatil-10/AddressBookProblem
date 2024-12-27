@@ -1,6 +1,3 @@
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
-import org.w3c.dom.ls.LSOutput;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -27,6 +24,7 @@ class Contact{
         this.phone_number = phone_number;
         this.email = email;
     }
+
     public String getFirst_name(){
         return first_name;
     }
@@ -63,27 +61,36 @@ class AddressBook1 {
 
     public void addContact() throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        String addMore;
 
-        System.out.println(" Enter the First Name: ");
-        String firstName = br.readLine();
-        System.out.println("Last Name: ");
-        String lastName = br.readLine();
-        System.out.println("Enter Address: ");
-        String address = br.readLine();
-        System.out.println("Enter City Name: ");
-        String city = br.readLine();
-        System.out.println("State: ");
-        String state = br.readLine();
-        System.out.println("Enter Zip code: ");
-        int zip = Integer.parseInt(br.readLine());
-        System.out.println("Enter mail Id: ");
-        String email = br.readLine();
-        System.out.println("Enter Phone Number: ");
-        long phone_number = Long.parseLong(br.readLine());
+        do {
 
-        Contact contact = new Contact(firstName, lastName, address, city, state, zip, phone_number, email);
-        contactList.add(contact);
-        System.out.println("Contact added Successfully");
+
+            System.out.println(" Enter the First Name: ");
+            String firstName = br.readLine();
+            System.out.println("Last Name: ");
+            String lastName = br.readLine();
+            System.out.println("Enter Address: ");
+            String address = br.readLine();
+            System.out.println("Enter City Name: ");
+            String city = br.readLine();
+            System.out.println("State: ");
+            String state = br.readLine();
+            System.out.println("Enter Zip code: ");
+            int zip = Integer.parseInt(br.readLine());
+            System.out.println("Enter mail Id: ");
+            String email = br.readLine();
+            System.out.println("Enter Phone Number: ");
+            long phone_number = Long.parseLong(br.readLine());
+
+            Contact contact = new Contact(firstName, lastName, address, city, state, zip, phone_number, email);
+            contactList.add(contact);
+            System.out.println("Contact added Successfully");
+
+            System.out.println("Do you want to add anoher contact? (yes/no)");
+            addMore = br.readLine();
+
+        } while (addMore.equalsIgnoreCase("yes"));
     }
 
     public void displayContact() {
