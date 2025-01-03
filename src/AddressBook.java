@@ -144,6 +144,14 @@ class AddressBook1 {
         }
     }
 
+    public long countContactsByCity(String city){
+        return cityMap.getOrDefault(city.toLowerCase(), Collections.emptyList()).size();
+    }
+
+    public long countContactsByState(String state){
+        return stateMap.getOrDefault(state.toLowerCase(), Collections.emptyList()).size();
+    }
+
 
     public List<Contact> getContact () {
         return contactList;
@@ -266,8 +274,10 @@ public class AddressBook {
             System.out.println("6. Search contacts by City or State");
             System.out.println("7. Display Contacts by City");
             System.out.println("8. Display Contacts by State");
-            System.out.println("9. Display Available Address Books");
-            System.out.println("10. Exit");
+            System.out.println("9. Count Contacts by City");
+            System.out.println("10. Count Contacts by State");
+            System.out.println("11. Display Available Address Books");
+            System.out.println("12. Exit");
             System.out.println("Choose an option: ");
             option = sc.nextLine();
 
@@ -364,14 +374,45 @@ public class AddressBook {
                     break;
 
                 case "9":
-                    book.displayAddressBooks();
+                    System.out.println("Enter Address Book name: ");
+                    String countCityBookName = sc.nextLine();
+                    AddressBook1 countCityBook = book.getAddressBooks(countCityBookName);
+                    if (countCityBook != null) {
+                        System.out.println("Enter city to count: ");
+                        String countCity = sc.nextLine();
+                        long count = countCityBook.countContactsByCity(countCity);
+                        System.out.println("Number of contacts in " + countCity + ": " + count);
+                    } else {
+                        System.out.println("Address Book not found.");
+                    }
                     break;
 
                 case "10":
-                default:
+                    System.out.println("Enter Address Book name: ");
+                    String countStateBookName = sc.nextLine();
+                    AddressBook1 countStateBook = book.getAddressBooks(countStateBookName);
+                    if (countStateBook != null) {
+                        System.out.println("Enter state to count: ");
+                        String countState = sc.nextLine();
+                        long count = countStateBook.countContactsByState(countState);
+                        System.out.println("Number of contacts in " + countState + ": " + count);
+                    } else {
+                        System.out.println("Address Book not found.");
+                    }
+                    break;
+
+                case "11":
+                    book.displayAddressBooks();
+                    break;
+
+                case "12":
                     System.out.println("Exiting...");
                     sc.close();
-                    return;
+                    break;
+
+                default:
+                    System.out.println("Invalid Input");
+
             }
         } while(true);
     }
