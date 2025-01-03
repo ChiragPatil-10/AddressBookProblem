@@ -5,31 +5,31 @@ import java.io.InputStreamReader;
 import java.util.*;
 
 class Contact{
-    private String first_name;
-    private String last_name;
+    private String firstName;
+    private String lastName;
     private String address;
     private String city;
     private String state;
     private int zip;
-    private long phone_number;
+    private long phoneNumber;
     private String email;
 
-    Contact(String first_name, String last_name, String address, String city, String state, int zip, long phone_number, String email){
-        this.first_name = first_name;
-        this.last_name = last_name;
+    Contact(String firstName, String lastName, String address, String city, String state, int zip, long phoneNumber, String email){
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.address = address;
         this.city = city;
         this.state = state;
         this.zip = zip;
-        this.phone_number = phone_number;
+        this.phoneNumber = phoneNumber;
         this.email = email;
     }
 
     public String getFirst_name(){
-        return first_name;
+        return firstName;
     }
     public String getLast_name(){
-        return last_name;
+        return lastName;
     }
 
     public void updatedContact(String address, String city, String state, int zip, long phone_number, String email){
@@ -37,18 +37,18 @@ class Contact{
         this.city = city;
         this.state = state;
         this.zip = zip;
-        this.phone_number = phone_number;
+        this.phoneNumber = phoneNumber;
         this.email = email;
     }
 
     public void displayContact(){
         System.out.println("Contact Details: ");
-        System.out.println("Name: "+ first_name+" "+last_name);
+        System.out.println("Name: "+ firstName+" "+lastName);
         System.out.println("Address: "+address);
         System.out.println("City: "+city);
         System.out.println("State: "+state);
         System.out.println("Zip: "+zip);
-        System.out.println("Phone Number: "+phone_number);
+        System.out.println("Phone Number: "+phoneNumber);
         System.out.println("Email: "+email);
     }
 }
@@ -64,8 +64,6 @@ class AddressBook1 {
         String addMore;
 
         do {
-
-
             System.out.println(" Enter the First Name: ");
             String firstName = br.readLine();
             System.out.println("Last Name: ");
@@ -87,7 +85,7 @@ class AddressBook1 {
             contactList.add(contact);
             System.out.println("Contact added Successfully");
 
-            System.out.println("Do you want to add anoher contact? (yes/no)");
+            System.out.println("Do you want to add another contact? (yes/no)");
             addMore = br.readLine();
 
         } while (addMore.equalsIgnoreCase("yes"));
@@ -157,35 +155,110 @@ class AddressBook1 {
 }
 
 public class AddressBook {
+    private Map<String, AddressBook1> addressBooks;
+
+    public AddressBook() {
+        this.addressBooks = new HashMap<>();
+    }
+
+    public void createAddressBook(String name) {
+        if(!addressBooks.containsKey(name)) {
+            addressBooks.put(name, new AddressBook1());
+            System.out.println("Address Book "+name+" created successfully.");
+        }else {
+            System.out.println("address Book with this name already exists.");
+        }
+    }
+
+    public AddressBook1 getAddressBooks(String name) {
+        return addressBooks.get(name);
+    }
+
+    public void displayAddressBooks() {
+        if(addressBooks.isEmpty()) {
+            System.out.println("No address Books available.");
+        } else {
+            System.out.println("Available address book:");
+            for(String name : addressBooks.keySet()) {
+                System.out.println("- " + name);
+            }
+        }
+    }
     public static void main(String[] args) throws IOException {
         System.out.println("Welcome to Address Book Program");
-        AddressBook1 ab = new AddressBook1();
+        AddressBook book = new AddressBook();
         Scanner sc = new Scanner(System.in);
+        String option;
 
-        while (true) {
-            System.out.println("\n*** Menu ***");
-            System.out.println("1. Add Contact");
-            System.out.println("2. Display Contact");
-            System.out.println("3. Update Contact");
-            System.out.println("4. Delete Contact");
-            System.out.println("5. Exit");
-            System.out.print("Choose an option: ");
-            int choice = sc.nextInt();
-            switch (choice) {
-                case 1:
-                    ab.addContact();
+        do {
+            System.out.println("\n*** Address Book Manager ***");
+            System.out.println("1. Create Address Book");
+            System.out.println("2. Add Contact to Address Book");
+            System.out.println("3. Display Contacts in Address Book");
+            System.out.println("4. Edit Contact in Address Book");
+            System.out.println("5. Delete Available Address Books");
+            System.out.println("6. Display Available Address Books");
+            System.out.println("7. Exit");
+            System.out.println("Choose an option: ");
+            option = sc.nextLine();
+
+
+            switch (option) {
+                case "1":
+                    System.out.println("Enter Address Book name: ");
+                    String bookName = sc.nextLine();
+                    book.createAddressBook(bookName);
                     break;
 
-                case 2:
-                    ab.displayContact();
+                case "2":
+                    System.out.println("Enter Address Book name: ");
+                    String addBookName = sc.nextLine();
+                    AddressBook1 addBook = book.getAddressBooks(addBookName);
+                    if (addBook!=null) {
+                        addBook.addContact();
+                    } else {
+                        System.out.println("Address book not found. ");
+                    }
                     break;
-                case 3:
-                    ab.editContact();
+
+                case "3":
+                    System.out.println("Enter Address Book name: ");
+                    String displayBookName = sc.nextLine();
+                    AddressBook1 displayBook = book.getAddressBooks(displayBookName);
+                    if (displayBook!=null) {
+                        displayBook.displayContact();
+                    } else {
+                        System.out.println("Address Book not found.");
+                    }
                     break;
-                case 4:
-                    ab.deleteContact();
+
+                case "4":
+                    System.out.println("Enter Address Book name: ");
+                    String editBookName = sc.nextLine();
+                    AddressBook1 editBook = book.getAddressBooks(editBookName);
+                    if(editBook!=null) {
+                        editBook.editContact();
+                    } else {
+                        System.out.println("Address book not found");
+                    }
                     break;
-                case 5:
+
+                case "5":
+                    System.out.println("Enter Address Book name: ");
+                    String deleteBookName = sc.nextLine();
+                    AddressBook1 deleteBook = book.getAddressBooks(deleteBookName);
+                    if ( deleteBook!=null) {
+                        deleteBook.deleteContact();
+                    } else {
+                        System.out.println("Address book not found");
+                    }
+                    break;
+
+                case "6":
+                    book.displayAddressBooks();
+                    break;
+
+                case "7":
                     System.out.println("Exiting...");
                     sc.close();
                     return;
@@ -193,6 +266,6 @@ public class AddressBook {
                 default:
                     System.out.println("Invalid Input");
             }
-        }
+        } while(true);
     }
 }
