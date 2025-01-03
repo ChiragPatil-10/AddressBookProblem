@@ -28,6 +28,7 @@ class Contact{
     public String getFirst_name(){
         return firstName;
     }
+
     public String getLast_name(){
         return lastName;
     }
@@ -37,6 +38,18 @@ class Contact{
     }
     public String getState(){
         return state;
+    }
+
+    @Override
+    public String toString(){
+        return "Contact Details: "+
+                "\nName: "+ firstName + " "+lastName+
+                "\nAddress: "+address+
+                "\nCity: "+city+
+                "\nState: "+state+
+                "\nZip: "+zip+
+                "\nPhone Number: "+phoneNumber+
+                "\nEmail: "+email;
     }
 
     @Override
@@ -122,6 +135,18 @@ class AddressBook1 {
             addMore = br.readLine();
 
         } while (addMore.equalsIgnoreCase("yes"));
+    }
+
+    public void displaySortedContacts(){
+        List<Contact> sortedContacts = contactList.stream()
+                .sorted(Comparator.comparing(Contact::getFirst_name).thenComparing(Contact::getLast_name))
+                .collect(Collectors.toList());
+        if (sortedContacts.isEmpty()){
+            System.out.println("No contacts to display.");
+        }else {
+            System.out.println("\nSorted Address Book Contacts:");
+            sortedContacts.forEach(System.out::println);
+        }
     }
 
     public void displayContactByCity(String city){
@@ -276,11 +301,11 @@ public class AddressBook {
             System.out.println("8. Display Contacts by State");
             System.out.println("9. Count Contacts by City");
             System.out.println("10. Count Contacts by State");
-            System.out.println("11. Display Available Address Books");
-            System.out.println("12. Exit");
+            System.out.println("11. Display Sorted Contacts");
+            System.out.println("12. Display Available Address Books");
+            System.out.println("13. Exit");
             System.out.println("Choose an option: ");
             option = sc.nextLine();
-
 
             switch (option) {
                 case "1":
@@ -402,13 +427,22 @@ public class AddressBook {
                     break;
 
                 case "11":
+                    System.out.println("Enter the AddressBook name: ");
+                    String sortBookName = sc.nextLine();
+                    AddressBook1 sortedName = book.getAddressBooks(sortBookName);
+                    if (sortedName!=null){
+                        sortedName.displaySortedContacts();
+                    }else {
+                        System.out.println("Address Book not found.");
+                    }
+                    break;
+                case "12":
                     book.displayAddressBooks();
                     break;
-
-                case "12":
+                case "13":
                     System.out.println("Exiting...");
                     sc.close();
-                    break;
+                    return;
 
                 default:
                     System.out.println("Invalid Input");
@@ -417,3 +451,6 @@ public class AddressBook {
         } while(true);
     }
 }
+
+
+
