@@ -167,7 +167,6 @@ class AddressBook1 {
 
     public void deleteContact() {
         Scanner sc = new Scanner(System.in);
-
         System.out.println("Enter the First name of the contact to delete: ");
         String firstname = sc.nextLine();
         System.out.println("Enter the Last name of the contact to delete: ");
