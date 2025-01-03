@@ -74,9 +74,13 @@ class Contact{
 }
 class AddressBook1 {
     private List<Contact> contactList;
+    private Map<String, List<Contact>> cityMap;
+    private Map<String, List<Contact>> stateMap;
 
     public AddressBook1() {
         this.contactList = new ArrayList<>();
+        this.cityMap = new HashMap<>();
+        this.stateMap = new HashMap<>();
     }
 
     public void addContact() throws IOException {
@@ -112,11 +116,34 @@ class AddressBook1 {
                 System.out.println("Contact added Successfully");
             }
 
+            cityMap.computeIfAbsent(city.toLowerCase(), k -> new ArrayList<>()).add(newContact);
+            stateMap.computeIfAbsent(state.toLowerCase(), k-> new ArrayList<>()).add(newContact);
             System.out.println("Do you want to add another contact? (yes/no)");
             addMore = br.readLine();
 
         } while (addMore.equalsIgnoreCase("yes"));
     }
+
+    public void displayContactByCity(String city){
+        List<Contact>  contacts = cityMap.get(city.toLowerCase());
+        if (contacts!=null && !contacts.isEmpty()){
+            System.out.println("Contacts in "+city+":");
+            contacts.forEach(Contact::displayContact);
+        }else {
+            System.out.println("No contacts found in "+city+".");
+        }
+    }
+
+    public void displayContactByState(String state){
+        List<Contact> contacts = stateMap.get(state.toLowerCase());
+        if (contacts!=null && !contacts.isEmpty()){
+            System.out.println("Contacts in "+state+":");
+            contacts.forEach(Contact::displayContact);
+        }else {
+            System.out.println("No contacts found in "+state+".");
+        }
+    }
+
 
     public List<Contact> getContact () {
         return contactList;
@@ -236,9 +263,11 @@ public class AddressBook {
             System.out.println("3. Display Contacts in Address Book");
             System.out.println("4. Edit Contact in Address Book");
             System.out.println("5. Delete Available Address Books");
-            System.out.println("6. Display Available Address Books");
-            System.out.println("7. Search contacts by City or State");
-            System.out.println("8. Exit");
+            System.out.println("6. Search contacts by City or State");
+            System.out.println("7. Display Contacts by City");
+            System.out.println("8. Display Contacts by State");
+            System.out.println("9. Display Available Address Books");
+            System.out.println("10. Exit");
             System.out.println("Choose an option: ");
             option = sc.nextLine();
 
@@ -254,7 +283,7 @@ public class AddressBook {
                     System.out.println("Enter Address Book name: ");
                     String addBookName = sc.nextLine();
                     AddressBook1 addBook = book.getAddressBooks(addBookName);
-                    if (addBook!=null) {
+                    if (addBook != null) {
                         addBook.addContact();
                     } else {
                         System.out.println("Address book not found. ");
@@ -295,30 +324,54 @@ public class AddressBook {
                     break;
 
                 case "6":
-                    book.displayAddressBooks();
-                    break;
-
-                case "7":
                     System.out.println("Enter city to search");
                     String searchCity = sc.nextLine();
                     System.out.println("Enter state to search: ");
                     String searchState = sc.nextLine();
-                    List<Contact> searchResults = book.searchByCityOrState(searchCity,searchState);
-                    if (searchResults.isEmpty()){
+                    List<Contact> searchResults = book.searchByCityOrState(searchCity, searchState);
+                    if (searchResults.isEmpty()) {
                         System.out.println("No contacts found in the specified city or state.");
-                    }else {
+                    } else {
                         System.out.println("Search Results");
                         searchResults.forEach(Contact::displayContact);
                     }
                     break;
 
+                case "7":
+                    System.out.println("Enter Address Book name: ");
+                    String cityBookName = sc.nextLine();
+                    AddressBook1 cityBook = book.getAddressBooks(cityBookName);
+                    if (cityBook != null) {
+                        System.out.println("Enter city to search: ");
+                        String city = sc.nextLine();
+                        cityBook.displayContactByCity(city);
+                    } else {
+                        System.out.println("Address Book not found.");
+                    }
+                    break;
+
                 case "8":
+                    System.out.println("Enter Address Book name: ");
+                    String stateName = sc.nextLine();
+                    AddressBook1 stateBook = book.getAddressBooks(stateName);
+                    if (stateBook != null) {
+                        System.out.println("Enter State to search: ");
+                        String state = sc.nextLine();
+                        stateBook.displayContactByState(state);
+                    } else {
+                        System.out.println("Address Book not found");
+                    }
+                    break;
+
+                case "9":
+                    book.displayAddressBooks();
+                    break;
+
+                case "10":
+                default:
                     System.out.println("Exiting...");
                     sc.close();
                     return;
-
-                default:
-                    System.out.println("Invalid Input");
             }
         } while(true);
     }
